@@ -601,10 +601,16 @@ Use ARGS to pass additional arguments."
 
 (defvar magit-stgit-patch-section-map
   (let ((map (make-sparse-keymap)))
+    (define-key map "N"  'magit-stgit-new)
     (define-key map "k"  'magit-stgit-delete)
     (define-key map "a"  'magit-stgit-goto)
     (define-key map "\r" 'magit-stgit-show)
     (define-key map "#"  #'magit-stgit-mark-toggle)
+    (define-key map "n"  'magit-stgit-rename)
+    (define-key map "c"  'magit-stgit-commit)
+    (define-key map "f"  'magit-stgit-refresh)
+    (define-key map "F"  'magit-stgit-float)
+    (define-key map "e"  'magit-stgit-edit)
     map))
 
 (defun magit-insert-stgit-series ()
