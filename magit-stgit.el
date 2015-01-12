@@ -103,12 +103,16 @@
   :group 'magit-stgit-faces)
 
 (defface magit-stgit-applied
-  '((t :inherit magit-cherry-equivalent))
+  '((((background dark)) (:foreground "light yellow"))
+    (((background light)) (:foreground "purple"))
+    (t ()))
   "Face for an applied stgit patch."
   :group 'magit-stgit-faces)
 
 (defface magit-stgit-unapplied
-  '((t :inherit magit-cherry-unmatched))
+  '((((background dark)) (:foreground "gray80"))
+    (((background light)) (:foreground "orchid"))
+    (t ()))
   "Face for an unapplied stgit patch."
   :group 'magit-stgit-faces)
 
@@ -635,19 +639,22 @@ Use ARGS to pass additional arguments."
       (magit-insert-section (stgit-patch patch)
         (magit-insert
          (if (magit-stgit-mark-contains patch) "#" " "))
-        (magit-insert state (cond ((equal state ">") 'magit-stgit-current)
-                                  ((equal state "+") 'magit-stgit-applied)
-                                  ((equal state "-") 'magit-stgit-unapplied)
-                                  ((equal state "!") 'magit-stgit-hidden)
-                                  (t (user-error "Unknown stgit patch state: %s"
-                                                 state))))
-        (magit-insert empty 'magit-stgit-empty ?\s)
-        (when magit-stgit-show-patch-name
-          (magit-insert patch 'magit-stgit-patch ?\s))
-        (insert msg)
-        (put-text-property (line-beginning-position) (1+ (line-end-position))
-                           'keymap 'magit-stgit-patch-map)
-        (forward-line)))))
+
+        (let ((patch-face (cond ((equal state ">") 'magit-stgit-current)
+                                ((equal state "+") 'magit-stgit-applied)
+                                ((equal state "-") 'magit-stgit-unapplied)
+                                ((equal state "!") 'magit-stgit-hidden)
+                                (t (user-error "Unknown stgit patch state: %s"
+                                               state)))))
+
+          (magit-insert state patch-face)
+          (magit-insert empty 'magit-stgit-empty ?\s)
+          (when magit-stgit-show-patch-name
+            (magit-insert patch patch-face (s-repeat (+ 4 (- 30 (length patch))) " ")))
+          (insert msg)
+          (put-text-property (line-beginning-position) (1+ (line-end-position))
+                             'keymap 'magit-stgit-patch-map)
+          (forward-line))))))
 
 ;;; magit-stgit.el ends soon
 
