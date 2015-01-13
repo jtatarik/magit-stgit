@@ -1,6 +1,6 @@
 ;;; magit-stgit.el --- StGit extension for Magit
 
-;; Copyright (C) 2011-2015  The Magit Project Developers
+;; Copyright (C) 2011-2016  The Magit Project Developers
 
 ;; Author: Lluís Vilanova <vilanova@ac.upc.edu>
 ;; Maintainer: Jonas Bernoulli <jonas@bernoul.li>
@@ -274,6 +274,8 @@ Else, asks the user for a patch name."
              (?p  "Pop"      magit-stgit-pop-popup)
              (?f  "Float"    magit-stgit-float-popup)
              (?s  "Sink"     magit-stgit-sink-popup)
+             (?h  "Hide"     magit-stgit-hide-popup)
+             (?H  "Unhide"   magit-stgit-unhide-popup)
              ;;
              (?\r "Show"     magit-stgit-show)
              (?a  "Goto"     magit-stgit-goto-popup)
@@ -349,6 +351,34 @@ Use ARGS to pass additional arguments."
   (interactive (list (magit-stgit-read-patches t t t t "Float patch")
                      (magit-stgit-float-arguments)))
   (magit-run-stgit-and-mark-remove patches "float" args "--" patches))
+
+(magit-define-popup magit-stgit-hide-popup
+  "Popup console for StGit hide."
+  'magit-popups
+  :actions  '((?h  "Hide"  magit-stgit-hide))
+  :default-action #'magit-stgit-hide)
+
+;;;###autoload
+(defun magit-stgit-hide (patches &rest args)
+  "Hide PATCHES.
+Use ARGS to pass additional arguments."
+  (interactive (list (magit-stgit-read-patches t t t t "Hide patch")
+                     (magit-stgit-float-arguments)))
+  (magit-run-stgit-and-mark-remove patches "hide" args "--" patches))
+
+(magit-define-popup magit-stgit-unhide-popup
+  "Popup console for StGit unhide."
+  'magit-popups
+  :actions  '((?H  "Unhide"  magit-stgit-unhide))
+  :default-action #'magit-stgit-unhide)
+
+;;;###autoload
+(defun magit-stgit-unhide (patches &rest args)
+  "Float StGit PATCHES to the top.
+Use ARGS to pass additional arguments."
+  (interactive (list (magit-stgit-read-patches t t t t "Unhide patch")
+                     (magit-stgit-float-arguments)))
+  (magit-run-stgit-and-mark-remove patches "unhide" args "--" patches))
 
 ;;;###autoload
 (defun magit-stgit-rename (oldname newname)
@@ -662,6 +692,11 @@ Use ARGS to pass additional arguments."
     ["Sink patch" magit-stgit-sink-popup
      :help "Sink StGit patch deeper down the stack"]
     "---"
+    ["Hide patch" magit-stgit-hide-popup
+     :help "Hide a patch in the series"]
+    ["Unhide patch" magit-stgit-unhide-popup
+     :help "Unhide a hidden patch"]
+    "--"
     ["Refresh patch" magit-stgit-refresh-popup
      :help "Refresh the contents of a patch in an StGit series"]
     ["Repair" magit-stgit-repair
@@ -697,6 +732,8 @@ Use ARGS to pass additional arguments."
     (define-key map "S"  'magit-stgit-squash)
     (define-key map "p"  'magit-stgit-pop)
     (define-key map "P"  'magit-stgit-push)
+    (define-key map "h"  'magit-stgit-hide)
+    (define-key map "H"  'magit-stgit-unhide)
     map))
 
 (defun magit-insert-stgit-series ()
