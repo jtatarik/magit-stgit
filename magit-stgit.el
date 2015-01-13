@@ -379,6 +379,14 @@ Use ARGS to pass additional arguments."
         (add-to-list 'args target t))))
   (magit-run-stgit-and-mark-remove patches "sink" args "--" patches))
 
+(defun magit-stgit-sink-by-1 (patches)
+  "Sink StGit patch one position down the stack."
+  (interactive (list (magit-stgit-read-patches t t t t "Sink patch")))
+  (let* ((series (magit-stgit-lines "series" "--noprefix"))
+         (target-position (-elem-index (car patches) series)))
+    (when (and target-position (> target-position 0))
+      (magit-run-stgit-and-mark-remove patches "sink" "-t" (elt series (1- target-position)) patches))))
+
 (magit-define-popup magit-stgit-commit-popup
   "Popup console for StGit commit."
   'magit-popups
@@ -634,6 +642,7 @@ Use ARGS to pass additional arguments."
     (define-key map "f"  'magit-stgit-refresh)
     (define-key map "F"  'magit-stgit-float)
     (define-key map "e"  'magit-stgit-edit)
+    (define-key map "s"  'magit-stgit-sink-by-1)
     map))
 
 (defun magit-insert-stgit-series ()
