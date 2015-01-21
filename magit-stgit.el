@@ -270,6 +270,7 @@ Else, asks the user for a patch name."
              (?k  "Delete"   magit-stgit-delete-popup)
              (?S  "Squash"   magit-stgit-squash-popup)
              ;;
+             (?p  "Pop"      magit-stgit-pop-popup)
              (?f  "Float"    magit-stgit-float-popup)
              (?s  "Sink"     magit-stgit-sink-popup)
              ;;
@@ -574,6 +575,22 @@ Use ARGS to pass additional arguments."
                      (magit-stgit-squash-arguments)))
   (magit-run-stgit-async "squash" args "--" patches))
 
+(magit-define-popup magit-stgit-pop-popup
+  "Popup console for StGit pop."
+  'magit-stgit-popup
+  :switches '((?a "Pop all the applied patches" "--all")
+              (?k "Keep the local changes" "--keep"))
+  :options '((?n "Pop N patches" "--number=" read-number))
+  :actions '((?p "Pop" magit-stgit-pop))
+  :default-action #'magit-stgit-pop)
+
+;;;###autoload
+(defun magit-stgit-pop (patches &rest args)
+  "Pop the topmost PATCHES from StGit stack."
+  (interactive (list (magit-stgit-read-patches t t t t "Pop patches")
+                     (magit-stgit-pop-arguments)))
+  (magit-run-stgit "pop" args "--" patches))
+
 
 ;;; Mode
 
@@ -660,6 +677,7 @@ Use ARGS to pass additional arguments."
     (define-key map "e"  'magit-stgit-edit)
     (define-key map "s"  'magit-stgit-sink-by-1)
     (define-key map "S"  'magit-stgit-squash)
+    (define-key map "p"  'magit-stgit-pop)
     map))
 
 (defun magit-insert-stgit-series ()
