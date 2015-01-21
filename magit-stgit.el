@@ -268,6 +268,7 @@ Else, asks the user for a patch name."
              (?c  "Commit"   magit-stgit-commit-popup)
              (?C  "Uncommit" magit-stgit-uncommit-popup)
              (?k  "Delete"   magit-stgit-delete-popup)
+             (?S  "Squash"   magit-stgit-squash-popup)
              ;;
              (?f  "Float"    magit-stgit-float-popup)
              (?s  "Sink"     magit-stgit-sink-popup)
@@ -559,6 +560,21 @@ Use ARGS to pass additional arguments."
   (interactive (magit-stgit-redo-arguments))
   (magit-run-stgit "redo" args))
 
+(magit-define-popup magit-stgit-squash-popup
+  "Popup console for StGit squash."
+  'magit-popups
+  :options '((?n "Name of the squashed patch" "--name=" read-string))
+  :actions '((?s "Squash" magit-stgit-squash))
+  :default-action #'magit-stgit-squash)
+
+;;;###autoload
+(defun magit-stgit-squash (patches &rest args)
+  "Squash two or more PATCHES into one."
+  (interactive (list (magit-stgit-read-patches t t t t "Squash patches")
+                     (magit-stgit-squash-arguments)))
+  (magit-run-stgit-async "squash" args "--" patches))
+
+
 ;;; Mode
 
 (defvar magit-stgit-mode-map
@@ -643,6 +659,7 @@ Use ARGS to pass additional arguments."
     (define-key map "F"  'magit-stgit-float)
     (define-key map "e"  'magit-stgit-edit)
     (define-key map "s"  'magit-stgit-sink-by-1)
+    (define-key map "S"  'magit-stgit-squash)
     map))
 
 (defun magit-insert-stgit-series ()
