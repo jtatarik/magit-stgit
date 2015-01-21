@@ -270,6 +270,7 @@ Else, asks the user for a patch name."
              (?k  "Delete"   magit-stgit-delete-popup)
              (?S  "Squash"   magit-stgit-squash-popup)
              ;;
+             (?P  "Push"     magit-stgit-push-popup)
              (?p  "Pop"      magit-stgit-pop-popup)
              (?f  "Float"    magit-stgit-float-popup)
              (?s  "Sink"     magit-stgit-sink-popup)
@@ -591,6 +592,23 @@ Use ARGS to pass additional arguments."
                      (magit-stgit-pop-arguments)))
   (magit-run-stgit "pop" args "--" patches))
 
+(magit-define-popup magit-stgit-push-popup
+  "Popup console for StGit push."
+  'magit-stgit-popup
+  :switches '((?a "Push all the unapplied patches" "--all")
+              (?k "Keep the local changes" "--keep")
+              (?r "Push the patches in reverse order" "--reverse")
+              (?s "Push the patch with the original tree" "--set-tree")
+              (?m "Check for patches merged upstream" "--merged"))
+  :options '((?n "Push N patches" "--number=" read-number))
+  :actions '((?p "Push" magit-stgit-push))
+  :default-action #'magit-stgit-push)
+
+;;;###autoload
+(defun magit-stgit-push (patches &rest args)
+  (interactive (list (magit-stgit-read-patches t t t t "Pop patches")
+                     (magit-stgit-push-arguments)))
+  (magit-run-stgit "push" args "--" patches))
 
 ;;; Mode
 
@@ -678,6 +696,7 @@ Use ARGS to pass additional arguments."
     (define-key map "s"  'magit-stgit-sink-by-1)
     (define-key map "S"  'magit-stgit-squash)
     (define-key map "p"  'magit-stgit-pop)
+    (define-key map "P"  'magit-stgit-push)
     map))
 
 (defun magit-insert-stgit-series ()
