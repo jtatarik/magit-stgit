@@ -6,7 +6,7 @@
 ;; Maintainer: Jonas Bernoulli <jonas@bernoul.li>
 ;; Keywords: vc tools
 ;; Package: magit-stgit
-;; Package-Requires: ((cl-lib "0.5") (magit "2.1.0"))
+;; Package-Requires: ((cl-lib "0.5") (magit "2.3.0"))
 
 ;; Magit is free software; you can redistribute it and/or modify it
 ;; under the terms of the GNU General Public License as published by
@@ -719,7 +719,7 @@ Use ARGS to pass additional arguments."
     (magit-bind-match-strings (empty state patch msg) nil
       (delete-region (point) (point-at-eol))
       (magit-insert-section (stgit-patch patch)
-        (magit-insert
+        (insert
          (if (magit-stgit-mark-contains patch) "#" " "))
 
         (let ((patch-face (cond ((equal state ">") 'magit-stgit-current)
@@ -729,10 +729,10 @@ Use ARGS to pass additional arguments."
                                 (t (user-error "Unknown stgit patch state: %s"
                                                state)))))
 
-          (magit-insert state patch-face)
-          (magit-insert empty 'magit-stgit-empty ?\s)
+          (insert (propertize state 'face patch-face))
+          (insert (propertize empty 'face 'magit-stgit-empty) ?\s)
           (when magit-stgit-show-patch-name
-            (magit-insert patch patch-face (s-repeat (+ 4 (- 30 (length patch))) " ")))
+            (insert (propertize patch 'face patch-face) (s-repeat (+ 4 (- 30 (length patch))) " ")))
           (insert msg)
           (put-text-property (line-beginning-position) (1+ (line-end-position))
                              'keymap 'magit-stgit-patch-map)
