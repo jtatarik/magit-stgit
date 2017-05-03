@@ -1,6 +1,6 @@
 ;;; magit-stgit.el --- StGit extension for Magit
 
-;; Copyright (C) 2011-2016  The Magit Project Developers
+;; Copyright (C) 2011-2017  The Magit Project Developers
 
 ;; Author: Lluís Vilanova <vilanova@ac.upc.edu>
 ;; Maintainer: Jonas Bernoulli <jonas@bernoul.li>
@@ -498,19 +498,22 @@ into the series."
   :default-action #'magit-stgit-rebase)
 
 ;;;###autoload
-(defun magit-stgit-rebase (&rest args)
+(defun magit-stgit-rebase (revision &rest args)
   "Rebase a StGit patch series.
 Use ARGS to pass additional arguments"
-  (interactive (magit-stgit-rebase-arguments))
-  (let* ((branch (magit-get-current-branch))
-         (remote (magit-get-remote branch)))
-    (if (not (and remote branch))
-        (user-error "Branch has no upstream")
-      (when (y-or-n-p "Update remote first? ")
-        (message "Updating remote...")
-        (magit-run-git-async "remote" "update" remote)
-        (message "Updating remote...done"))
-      (magit-run-stgit "rebase" args "--" (format "remotes/%s/%s" remote branch)))))
+  (interactive (list (magit-read-other-branch-or-commit "New Base ID")
+                     (magit-stgit-rebase-arguments)))
+  (magit-run-stgit "rebase" args "--" revision)
+  ;; (let* ((branch (magit-get-current-branch))
+  ;;        (remote (magit-get-remote branch)))
+  ;;   (if (not (and remote branch))
+  ;;       (user-error "Branch has no upstream")
+  ;;     (when (y-or-n-p "Update remote first? ")
+  ;;       (message "Updating remote...")
+  ;;       (magit-run-git-async "remote" "update" remote)
+  ;;       (message "Updating remote...done"))
+  ;;     (magit-run-stgit "rebase" args "--" (format "remotes/%s/%s" remote branch))))
+  )
 
 (magit-define-popup magit-stgit-delete-popup
   "Popup console for StGit delete."
