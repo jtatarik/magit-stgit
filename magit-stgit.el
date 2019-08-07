@@ -1,6 +1,6 @@
 ;;; magit-stgit.el --- StGit extension for Magit
 
-;; Copyright (C) 2011-2017  The Magit Project Developers
+;; Copyright (C) 2011-2017, 2019  The Magit Project Developers
 
 ;; Author: Lluís Vilanova <vilanova@ac.upc.edu>
 ;; Maintainer: Jonas Bernoulli <jonas@bernoul.li>
@@ -205,7 +205,7 @@ PROMPT."
         region
         (and use-marks
              (magit-stgit-patches-sorted magit-stgit-marked-patches))
-        (list (or (and use-point (magit-section-when stgit-patch))
+        (list (or (and use-point (magit-section-value-if 'stgit-patch))
                   (and prompt (magit-stgit-read-patch prompt require-match)))))))
 
 ;;; Marking
