@@ -1,6 +1,6 @@
 ;;; magit-stgit.el --- StGit extension for Magit
 
-;; Copyright (C) 2011-2017, 2019  The Magit Project Developers
+;; Copyright (C) 2011-2017, 2019, 2020  The Magit Project Developers
 
 ;; Author: Lluís Vilanova <vilanova@ac.upc.edu>
 ;; Maintainer: Jonas Bernoulli <jonas@bernoul.li>
@@ -769,10 +769,10 @@ Use ARGS to pass additional arguments."
                                 (t (user-error "Unknown stgit patch state: %s"
                                                state)))))
 
-          (insert (propertize state 'face patch-face))
-          (insert (propertize empty 'face 'magit-stgit-empty) ?\s)
+          (insert (propertize state 'face (list patch-face)))
+          (insert (propertize empty 'face '(magit-stgit-empty)) ?\s)
           (when magit-stgit-show-patch-name
-            (insert (propertize patch 'face patch-face) (s-repeat (+ 4 (- 30 (length patch))) " ")))
+            (insert (propertize patch 'face (list patch-face)) (s-repeat (+ 4 (- 30 (length patch))) " ")))
           (insert msg)
           (put-text-property (line-beginning-position) (1+ (line-end-position))
                              'keymap 'magit-stgit-patch-map)
