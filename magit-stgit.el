@@ -769,10 +769,10 @@ Use ARGS to pass additional arguments."
                                 (t (user-error "Unknown stgit patch state: %s"
                                                state)))))
 
-          (insert (propertize state 'face (list patch-face)))
-          (insert (propertize empty 'face '(magit-stgit-empty)) ?\s)
+          (insert (propertize state 'font-lock-face (list patch-face)))
+          (insert (propertize empty 'font-lock-face '(magit-stgit-empty)) ?\s)
           (when magit-stgit-show-patch-name
-            (insert (propertize patch 'face (list patch-face)) (s-repeat (+ 4 (- 30 (length patch))) " ")))
+            (insert (propertize patch 'font-lock-face (list patch-face)) (s-repeat (+ 4 (- 30 (length patch))) " ")))
           (insert msg)
           (put-text-property (line-beginning-position) (1+ (line-end-position))
                              'keymap 'magit-stgit-patch-map)
