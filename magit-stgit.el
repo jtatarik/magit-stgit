@@ -1,6 +1,6 @@
 ;;; magit-stgit.el --- StGit extension for Magit
 
-;; Copyright (C) 2011-2017, 2019, 2020  The Magit Project Developers
+;; Copyright (C) 2011-2017, 2019, 2020, 2021  The Magit Project Developers
 
 ;; Author: Lluís Vilanova <vilanova@ac.upc.edu>
 ;; Maintainer: Jonas Bernoulli <jonas@bernoul.li>
@@ -779,8 +779,6 @@ Use ARGS to pass additional arguments."
           (forward-line))))))
 
 ;;; magit-stgit.el ends soon
-
-(define-obsolete-function-alias 'turn-on-magit-stgit 'magit-stgit-mode)
 
 (provide 'magit-stgit)
 ;; Local Variables:
