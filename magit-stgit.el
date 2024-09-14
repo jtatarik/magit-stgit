@@ -1,6 +1,6 @@
 ;;; magit-stgit.el --- StGit extension for Magit
 
-;; Copyright (C) 2011-2017, 2019, 2020, 2021  The Magit Project Developers
+;; Copyright (C) 2011-2017, 2019, 2020, 2021, 2024  The Magit Project Developers
 
 ;; Author: Lluís Vilanova <vilanova@ac.upc.edu>
 ;; Maintainer: Jonas Bernoulli <jonas@bernoul.li>
@@ -57,6 +57,7 @@
 (require 'cl-lib)
 
 (require 'magit)
+(require 'magit-popup)
 
 ;;; Options
 ;;;; Variables
